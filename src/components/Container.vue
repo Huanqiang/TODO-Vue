@@ -1,10 +1,11 @@
 <template>
   <section class="todos-container">
-    <InputTodo
-      :isAllCompleted="completedAll"
-      @insert="insert"
-      @toggle-all="toggleAll"
-    ></InputTodo>
+    <InputTodo @insert="insert">
+      <SelectedAll
+        :isAllCompleted="completedAll"
+        @toggle-all="toggleAll"
+      ></SelectedAll>
+    </InputTodo>
     <TodoItem
       v-for="todo in showedTodos"
       :key="todo.id"
@@ -13,21 +14,25 @@
       @edited="edited"
       @deleted="deleted"
     ></TodoItem>
-    <TodoInfos
-      :count="todos.length"
-      @show="show"
-      @clear="clear"
-    ></TodoInfos>
+    <TodoInfos @show="show">
+      <template v-slot:count>
+        <div>{{ todos.length }} items left</div>
+      </template>
+      <template v-slot:clear>
+        <div @click="clear">Clear completed</div>
+      </template>
+    </TodoInfos>
   </section>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Todo from '@/model/todo';
+import SelectedAll from '@/components/SelectedAll.vue';
 import InputTodo from '@/components/InputTodo.vue';
 import TodoItem from '@/components/TodoItem.vue';
 import TodoInfos from '@/components/TodoInfo.vue';
 @Component({
-  components: { TodoItem, InputTodo, TodoInfos }
+  components: { SelectedAll, TodoItem, InputTodo, TodoInfos }
 })
 export default class Container extends Vue {
   private todos: Array<Todo> = [

@@ -1,20 +1,17 @@
 <template>
   <div class="todo-infos">
-  <div>{{ count }} items left</div>
-  <ul class="todo-state">
-    <li :class="{selected: allClass}"><a @click="showAll">All</a></li>    
-    <li :class="{selected: activeClass}"><a @click="showActive">Active</a></li>
-    <li :class="{selected: completedClass}"><a @click="showCompleted">Completed</a></li>
-  </ul>
-  <div @click="clearCompleted">Clear completed</div>
-</div>
+    <slot name="count"></slot>
+    <ul class="todo-state">
+      <li :class="{selected: allClass}"><a @click="showAll">All</a></li>
+      <li :class="{selected: activeClass}"><a @click="showActive">Active</a></li>
+      <li :class="{selected: completedClass}"><a @click="showCompleted">Completed</a></li>
+    </ul>
+    <slot name="clear"></slot>
+  </div>
 </template>
 <script lang="ts">
 import Vue from 'vue';
 export default Vue.extend({
-  props: {
-    count: Number
-  },
   data() {
     return {
       allClass: true,
@@ -31,9 +28,6 @@ export default Vue.extend({
     },
     showCompleted() {
       this.setShowType('completed');
-    },
-    clearCompleted() {
-      this.$emit('clear');
     },
     setShowType(type: string) {
       this.$emit('show', type);
